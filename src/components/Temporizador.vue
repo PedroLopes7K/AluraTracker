@@ -63,6 +63,8 @@ export default defineComponent({
       clearInterval(this.cronometro)
       this.$emit('aoTemporizadorFinalizado', this.tempoEmSegundos)
       this.tempoEmSegundos = 0
+      this.pause = false
+
     },
     pausar () {
       this.pause = !this.pause
