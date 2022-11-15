@@ -18,6 +18,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useStore } from "@/store"
+import { TipoNotificacao } from '@/interfaces/INotificacao';
 
 export default defineComponent({
   name: 'Formulario',
@@ -56,6 +57,12 @@ export default defineComponent({
 
         // this.projetos.push(projeto)
         this.store.commit('ADICIONA_PROJETO', this.nomeProjeto)
+        this.store.commit('INSERIR_NOTIFICACAO', {
+          id: new Date().getTime(),
+          titulo: "Criação",
+          texto: "Projeto Inserido com sucesso!",
+          tipo: TipoNotificacao.SUCESSO
+        })
 
 
       }
