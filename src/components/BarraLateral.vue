@@ -3,14 +3,34 @@
       <h1>
         <img src="../assets/logo.png" alt="">  
       </h1>
-      <button class="button" @click="alterarTema">
+ <div class="has-text-centered">
+  <button class="button" @click="alterarTema">
         {{ textoBotao }}
       </button>
+ </div>
+
+ <nav class="panel mt-5">
+   <ul>
+    <li>
+   <RouterLink to="/" class="link">
+    <i class="fas fa-tasks"></i>
+    Tarefas
+   </RouterLink>
+    </li>
+    <li>
+   <RouterLink to="/projetos" class="link">
+    <i class="fas fa-project-diagram"></i>
+    Projetos
+   </RouterLink>
+    </li>
+   </ul>
+ </nav>
   </header>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { RouterLink } from 'vue-router'
 
 export default defineComponent({
   name: 'BarraLateral',
@@ -50,5 +70,17 @@ header {
     padding: 2.5rem;
     height: auto;
   }
+}
+
+li {
+ margin-bottom: 7px;
+}
+
+.link {
+  color: aliceblue;
+  font-size: large;
+}
+.link i {
+  margin: 0 5px;
 }
 </style>
