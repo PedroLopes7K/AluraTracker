@@ -46,6 +46,8 @@
 import { computed, defineComponent } from 'vue';
 import { useStore } from "@/store"
 import RouterLink from 'vue-router';
+import { TipoNotificacao } from '@/interfaces/INotificacao';
+
 
 export default defineComponent({
   name: 'Lista',
@@ -58,6 +60,12 @@ export default defineComponent({
   methods: {
     deletar(id: string) {
       this.store.commit('EXCLUIR_PROJETO', id)
+      this.store.commit('INSERIR_NOTIFICACAO', {
+        id: new Date().getTime(),
+        titulo: "Deletado",
+        texto: "Projeto deletado com sucesso!",
+        tipo: TipoNotificacao.ATENCAO
+      })
     }
   }
   ,

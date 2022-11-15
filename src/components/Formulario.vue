@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="column">
-        <Temporizador @aoTemporizadorFinalizado="finalizarTarefa" />
+        <Temporizador :id-projeto="idProjeto" @aoTemporizadorFinalizado="finalizarTarefa" />
       </div>
     </div>
   </div>
@@ -24,6 +24,8 @@ import { key } from "@/store";
 import { computed, defineComponent } from "vue";
 import { useStore } from "vuex";
 import Temporizador from './Temporizador.vue'
+import { TipoNotificacao } from '@/interfaces/INotificacao';
+
 
 export default defineComponent({
   name: "Formulário",
@@ -39,20 +41,37 @@ export default defineComponent({
   },
   methods: {
     finalizarTarefa(tempoDecorrido: number): void {
+
+      // ESSA LOGICA TEM QUE IR PARA O TEMPORIZADOR NO PLAY
+      // if (!this.idProjeto) {
+      //   this.store.commit('INSERIR_NOTIFICACAO', {
+      //     id: new Date().getTime(),
+      //     titulo: "Falha",
+      //     texto: "Tarefa sem um projeto vinculado!",
+      //     tipo: TipoNotificacao.FALHA
+      //   })
+      //   return
+      // }
       this.$emit('aoSalvarTarefa', {
         duracaoEmSegundos: tempoDecorrido,
         descricao: this.descricao,
         projeto: this.projetos.find(projeto => projeto.id == this.idProjeto)
       })
       this.descricao = ''
+      this.store.commit('INSERIR_NOTIFICACAO', {
+        id: new Date().getTime(),
+        titulo: "Sucesso",
+        texto: "Tarefa concluida com sucesso!",
+        tipo: TipoNotificacao.SUCESSO
+      })
     }
   },
 
   setup() {
     const store = useStore(key)
-
     // tudo retornado no setup fica disponivel para o component
     return {
+      store,
       projetos: computed(() => store.state.projetos)
     }
   }

@@ -12,7 +12,7 @@
       <span class="icon">
         <i class="fas fa-pause"></i>
       </span>
-      <span>{{valorPause}}</span>
+      <span>{{ valorPause }}</span>
     </button>
     <button class="button" @click="finalizar" :disabled="!cronometroRodando">
       <span class="icon">
@@ -26,6 +26,12 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Cronometro from './Cronometro.vue'
+import { useStore } from "vuex";
+import { key } from "@/store";
+import { TipoNotificacao } from '@/interfaces/INotificacao';
+
+
+
 
 export default defineComponent({
   name: "Temporizador",
@@ -33,7 +39,13 @@ export default defineComponent({
   components: {
     Cronometro
   },
-  data () {
+  props: {
+    idProjeto: {
+      type: String,
+      default: ''
+    }
+  },
+  data() {
     return {
       tempoEmSegundos: 0,
       cronometro: 0,
@@ -42,23 +54,33 @@ export default defineComponent({
     }
   },
   computed: {
-    valorPause() : string {
+    valorPause(): string {
       return this.pause ? 'Retomar' : 'Pause'
     }
   },
   methods: {
-    iniciar () {
+    iniciar() {
+
+      if (!this.idProjeto) {
+        this.store.commit('INSERIR_NOTIFICACAO', {
+          id: new Date().getTime(),
+          titulo: "Falha",
+          texto: "Tarefa sem um projeto vinculado!",
+          tipo: TipoNotificacao.FALHA
+        })
+        return
+      }
       // começar a contagem
       // 1 seg = 1000 ms
       this.cronometroRodando = true
       this.cronometro = setInterval(() => {
 
-        if(this.pause == false) {
-          this.tempoEmSegundos += 1        
+        if (this.pause == false) {
+          this.tempoEmSegundos += 1
         }
       }, 1000)
     },
-    finalizar () {
+    finalizar() {
       this.cronometroRodando = false
       clearInterval(this.cronometro)
       this.$emit('aoTemporizadorFinalizado', this.tempoEmSegundos)
@@ -66,8 +88,16 @@ export default defineComponent({
       this.pause = false
 
     },
-    pausar () {
+    pausar() {
       this.pause = !this.pause
+    },
+
+  },
+  setup() {
+    const store = useStore(key)
+    // tudo retornado no setup fica disponivel para o component
+    return {
+      store
     }
   }
 });

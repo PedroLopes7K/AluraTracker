@@ -48,6 +48,12 @@ export default defineComponent({
           id: this.id,
           nome: this.nomeProjeto
         })
+        this.store.commit('INSERIR_NOTIFICACAO', {
+          id: new Date().getTime(),
+          titulo: "Atualizado",
+          texto: "Projeto atualizado com sucesso!",
+          tipo: TipoNotificacao.ATENCAO
+        })
 
       } else {
         // const projeto: IProjeto = {
@@ -59,7 +65,7 @@ export default defineComponent({
         this.store.commit('ADICIONA_PROJETO', this.nomeProjeto)
         this.store.commit('INSERIR_NOTIFICACAO', {
           id: new Date().getTime(),
-          titulo: "Criação",
+          titulo: "Sucesso",
           texto: "Projeto Inserido com sucesso!",
           tipo: TipoNotificacao.SUCESSO
         })
